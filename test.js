@@ -6,7 +6,8 @@ const wwebVersion = '2.2412.50';
 const client = new Client({
     authStrategy: new LocalAuth(), // your authstrategy here
     puppeteer: {
-        // puppeteer args here
+        headless: true,
+        args: ['--no-sandbox']
     },
     webVersionCache: {
         type: 'remote',
