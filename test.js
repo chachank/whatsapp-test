@@ -1,10 +1,21 @@
-const { Client } = require('whatsapp-web.js');
+const { Client, LocalAuth } = require('whatsapp-web.js');
+const qrcode = require('qrcode-terminal');
 
-const client = new Client();
+const wwebVersion = '2.2412.50';
 
-client.on('qr', (qr) => {
-    // Generate and scan this code with your phone
-    console.log('QR RECEIVED', qr);
+const client = new Client({
+    authStrategy: new LocalAuth(), // your authstrategy here
+    puppeteer: {
+        // puppeteer args here
+    },
+    webVersionCache: {
+        type: 'remote',
+        remotePath: `https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/${wwebVersion}.html`,
+    },
+});
+
+client.on('qr', qr => {
+    qrcode.generate(qr, { small: true });
 });
 
 client.on('ready', () => {
@@ -12,7 +23,10 @@ client.on('ready', () => {
 });
 
 client.on('message', msg => {
+    console.log(msg);
     if (msg.body == '!ping') {
+        let chat = msg.getChat();
+        chat.sendSeen();
         msg.reply('pong');
     }
 });
