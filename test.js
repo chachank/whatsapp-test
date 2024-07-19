@@ -26,7 +26,7 @@ client.on('ready', () => {
 client.on('message', msg => {
   console.log(msg)
   if (msg.body === '!ping') {
-    const chat = msg.getChat()
+    let chat = msg.getChat()
     chat.sendSeen()
     msg.reply('pong')
   }
